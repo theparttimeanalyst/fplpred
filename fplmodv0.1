@@ -1,0 +1,954 @@
+---
+title: "fplmodv0.2"
+author: "Alex Thom"
+date: "17/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+### packages
+
+
+```{r}
+library(tidyverse)
+
+library(fplscrapR)
+
+library(tidymodels)
+
+library(lubridate)
+
+library(readxl)
+
+```
+
+
+
+
+```{r}
+
+
+fixt18 <- get_game_list(season = 18)
+fixt19 <- get_game_list(season = 19)
+
+
+season16 <- get_player_details(season = 16)
+
+season17 <- get_player_details(season = 17)
+
+season18 <- get_player_details(season = 18)
+
+
+season19 <- get_player_details(season = 19)
+
+
+
+
+
+setwd("~/R/FPL")
+
+teams <- read_csv("teams.csv")
+
+matchdat <- read_csv("matches.csv")
+
+players <- read_csv("play2.csv")
+
+play2 <- read_xlsx("play2.xlsx")
+
+```
+
+
+
+
+```{r}
+
+colnames(teams)[1] <- "Season"
+
+colnames(teams)[2] <- "opponent_team"
+
+
+
+```
+
+
+```{r}
+
+remotes::install_github('ewenme/understatr')
+
+
+
+```
+
+
+```{r}
+
+library(understatr)
+
+
+
+
+
+
+```
+
+
+```{r}
+
+
+
+twenty16 <- get_team_players_stats(team_name = "Arsenal" ,year = 2016) %>%
+              bind_rows(get_team_players_stats(team_name = "Bournemouth" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Burnley" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Chelsea" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Crystal Palace" ,year = 2016)) %>%
+                     bind_rows(get_team_players_stats(team_name = "Everton" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Hull" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Leicester" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Liverpool" ,year = 2016)) %>%
+             bind_rows(get_team_players_stats(team_name = "Manchester City" ,year = 2016)) %>%
+                   bind_rows(get_team_players_stats(team_name = "Manchester United" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Middlesbrough" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Southampton" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Stoke" ,year = 2016)) %>%
+                     bind_rows(get_team_players_stats(team_name = "Sunderland" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Swansea" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Tottenham" ,year = 2016)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Watford" ,year = 2016)) %>%
+             bind_rows(get_team_players_stats(team_name = "West Bromwich Albion" ,year = 2016)) %>%
+                    bind_rows(get_team_players_stats(team_name = "West Ham" ,year = 2016))
+
+
+
+````
+
+
+
+```{r}
+
+
+
+twenty17 <- get_team_players_stats(team_name = "Arsenal" ,year = 2017) %>%
+              bind_rows(get_team_players_stats(team_name = "Bournemouth" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Burnley" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Chelsea" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Crystal Palace" ,year = 2017)) %>%
+                     bind_rows(get_team_players_stats(team_name = "Everton" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Newcastle United" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Leicester" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Liverpool" ,year = 2017)) %>%
+             bind_rows(get_team_players_stats(team_name = "Manchester City" ,year = 2017)) %>%
+                   bind_rows(get_team_players_stats(team_name = "Manchester United" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Huddersfield" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Southampton" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Stoke" ,year = 2017)) %>%
+                     bind_rows(get_team_players_stats(team_name = "Brighton" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Swansea" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Tottenham" ,year = 2017)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Watford" ,year = 2017)) %>%
+             bind_rows(get_team_players_stats(team_name = "West Bromwich Albion" ,year = 2017)) %>%
+                    bind_rows(get_team_players_stats(team_name = "West Ham" ,year = 2017))
+
+
+````
+
+
+```{r}
+
+
+
+
+
+
+twenty18 <- get_team_players_stats(team_name = "Arsenal" ,year = 2018) %>%
+              bind_rows(get_team_players_stats(team_name = "Bournemouth" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Burnley" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Chelsea" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Crystal Palace" ,year = 2018)) %>%
+                     bind_rows(get_team_players_stats(team_name = "Everton" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Newcastle United" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Leicester" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Liverpool" ,year = 2018)) %>%
+             bind_rows(get_team_players_stats(team_name = "Manchester City" ,year = 2018)) %>%
+                   bind_rows(get_team_players_stats(team_name = "Manchester United" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Huddersfield" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Southampton" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Cardiff" ,year = 2018)) %>%
+                     bind_rows(get_team_players_stats(team_name = "Brighton" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Fulham" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Tottenham" ,year = 2018)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Watford" ,year = 2018)) %>%
+             bind_rows(get_team_players_stats(team_name = "Wolverhampton Wanderers" ,year = 2018)) %>%
+                    bind_rows(get_team_players_stats(team_name = "West Ham" ,year = 2018))
+
+
+```
+
+
+
+
+
+
+
+```{r}
+
+
+
+
+twenty19 <- get_team_players_stats(team_name = "Arsenal" ,year = 2019) %>%
+              bind_rows(get_team_players_stats(team_name = "Bournemouth" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Burnley" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Chelsea" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Crystal Palace" ,year = 2019)) %>%
+                     bind_rows(get_team_players_stats(team_name = "Everton" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Newcastle United" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Leicester" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Liverpool" ,year = 2019)) %>%
+             bind_rows(get_team_players_stats(team_name = "Manchester City" ,year = 2019)) %>%
+                   bind_rows(get_team_players_stats(team_name = "Manchester United" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Sheffield United" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Southampton" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Norwich" ,year = 2019)) %>%
+                     bind_rows(get_team_players_stats(team_name = "Brighton" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Aston Villa" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Tottenham" ,year = 2019)) %>%
+                  bind_rows(get_team_players_stats(team_name = "Watford" ,year = 2019)) %>%
+             bind_rows(get_team_players_stats(team_name = "Wolverhampton Wanderers" ,year = 2019)) %>%
+                    bind_rows(get_team_players_stats(team_name = "West Ham" ,year = 2019))
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+colnames(play2)[2] <- "player_name"
+
+
+
+```
+
+
+```{r}
+
+
+
+playdat <- twenty16 %>% bind_rows(twenty17) %>%
+                            bind_rows(twenty18) %>%
+                              bind_rows(twenty19) %>%
+                                group_by(player_name, year) %>%
+                                summarise(ninet = sum(time)/90, xgs = sum(xG), xas = sum(xA), npxGs = sum(npxG)) %>%
+                                    mutate(xg90 = xgs/ninet, xA90= xas/ninet, npxg90 = npxGs / ninet) %>%
+                                    select(player_name, xg90, xA90, npxg90, year) %>%
+                                      left_join(play2, by = "player_name") %>%
+                                        select(player_name, xg90, xA90, npxg90, year, NameID, Pos, FPLPOS)
+
+
+colnames(playdat)[1] <- "playername"
+colnames(playdat)[5] <- "season"
+
+
+````
+
+
+
+
+
+```{r}
+
+
+
+season16 <- season16 %>% separate(kickoff_time, c("date", "time"), "T")
+season17 <- season17 %>% separate(kickoff_time, c("date", "time"), "T")
+season18 <- season18 %>% separate(kickoff_time, c("date", "time"), "T")
+season19 <- season19 %>% separate(kickoff_time, c("date", "time"), "T")
+
+season16$date <-  ymd(season16$date)
+season17$date <-  ymd(season17$date)
+season18$date <-  ymd(season18$date)
+season19$date <-  ymd(season19$date)
+
+````
+
+
+
+
+```{r}
+
+
+## gcalaculating what the average performances 
+
+homeav <- matchdat %>% filter(league_id == 2411) %>% 
+                          summarise(avfor = mean(xg1, na.rm = T), avag = mean(xg2, na.rm = T))
+
+homfor <- homeav[[1]]
+homeag <- homeav[[2]]
+
+
+homeratdat2 <- matchdat %>% filter(league_id == 2411) %>%
+                        group_by(team1) %>%
+                        summarise(avfor = mean(xg1, na.rm = T), avag = mean(xg2, na.rm = T)) %>% 
+                        mutate(xgfh = avfor - homfor, xgah = avag - homeag) %>%
+                        select(team1, xgfh, xgah)
+
+
+awayavav <- matchdat %>% filter(league_id == 2411) %>% 
+  summarise(avfor = mean(xg2, na.rm = T), avag = mean(xg1, na.rm = T))
+
+awafor <- awayavav[[1]]
+awaag <- awayavav[[2]]
+
+
+awayratdat2 <- matchdat %>% filter(league_id == 2411) %>%
+  group_by(team2) %>%
+  summarise(avfor = mean(xg2, na.rm = T), avag = mean(xg1, na.rm = T)) %>% 
+  mutate(xgfa = avfor - awafor, xgaa = avag - awaag) %>%
+  select(team2, xgfa, xgaa)
+
+
+
+
+
+
+
+
+
+```
+
+
+```{r}
+
+#### comparing the teams actual performance to the average performance. 
+
+matches <- matchdat %>% filter(league_id == 2411) %>%
+                              left_join(homeratdat2, by = "team1") %>%
+                               left_join(awayratdat2, by = "team2") %>%
+                                  mutate(deltafh =  xgfh + xgaa, deltagh = xgah+xgfa) %>%
+                                    select(season, score1, score2, deltafh, deltagh)
+
+mat1 <- matches %>% select(season, score1, deltafh) %>%
+                      mutate(loc = "home")
+
+
+colnames(mat1)[2] <- "score"
+colnames(mat1)[3] <- "delta"
+
+
+mat2 <- matches %>% select(season, score2, deltagh) %>%
+                      mutate(loc = "away")
+
+
+colnames(mat2)[2] <- "score"
+colnames(mat2)[3] <- "delta"
+
+
+matall <- mat1 %>% bind_rows(mat2) %>%
+                  mutate(scorecat = as.factor(if_else(score > 5,"5", as.character(score)))) %>%
+                    select(-score, -season)
+
+
+
+
+
+
+
+
+
+
+```
+
+
+```{r}
+ 
+ggplot(matches, aes(x = deltagh, y = score1)) + geom_point(alpha =0.3) + geom_smooth(method = "lm")
+
+
+
+
+
+```
+
+
+
+
+
+
+```{r}
+
+score_split <- initial_split(matall, prop = 0.9, strata = scorecat) 
+
+score_train <- training(score_split)
+
+score_test <- testing(score_split)
+
+
+
+rand1 <- rand_forest() %>% # what typpe of model do i want to fit 
+                set_engine("ranger") %>% # the engine used to fit the model. For randomm forest rf is a another one
+                  set_mode("classification") %>% # the  mode for the model as random forest can do both classification and regression 
+                  fit(scorecat ~., data = score_train) # the function to fit the model
+
+
+
+
+
+
+
+````
+
+
+
+```{r}
+
+### filtering the matches to test the model on 
+
+matches_test <- matchdat %>% filter(league_id == 2411) %>%
+                              left_join(homeratdat2, by = "team1") %>%
+                               left_join(awayratdat2, by = "team2") %>%
+                                  mutate(deltafh =  xgfh + xgaa, deltagh = xgah+xgfa) %>%
+                                    filter(season == 2019) %>%
+                                     mutate(fixt = 1:n())
+
+
+
+match19_h <- matches_test %>% select(team1, deltafh, fixt) %>% 
+                                mutate(loc = "home")
+
+
+match19_a <- matches_test %>% select(team2, deltagh, fixt) %>%
+                                mutate(loc = "away")
+
+
+colnames(match19_h)[1] <- "team"
+colnames(match19_h)[2] <- "delta"
+
+
+
+colnames(match19_a)[1] <- "team"
+colnames(match19_a)[2] <- "delta"
+
+
+match19 <- match19_h %>% bind_rows(match19_a)
+
+
+````
+
+
+```{r}
+
+
+
+x <- predict(rand1, new_data = match19, type = "prob")
+
+
+
+match19_pred  <- match19 %>% bind_cols(x)
+
+
+homepred <- match19_pred %>% filter(loc == "home") %>%
+                                arrange(fixt)
+
+awaypred <- match19_pred %>% filter(loc == "away")%>%
+                                arrange(fixt)
+
+
+allpredsh <- homepred %>% bind_cols(awaypred) %>%
+                              select(team, fixt, .pred_01, .pred_11, .pred_21, .pred_31, .pred_41, .pred_51)
+
+colnames(allpredsh)[3] <- ".pred_0"
+colnames(allpredsh)[4] <- ".pred_1"
+colnames(allpredsh)[5] <- ".pred_2"
+colnames(allpredsh)[6] <- ".pred_3"
+colnames(allpredsh)[7] <- ".pred_4"
+colnames(allpredsh)[8] <- ".pred_5"
+
+
+
+allpredsa <- homepred %>% bind_cols(awaypred) %>%
+                              select(team1, fixt, .pred_0, .pred_1, .pred_2, .pred_3, .pred_4, .pred_5)
+
+colnames(allpredsa)[1] <- "team"
+
+
+allpreds <- allpredsh %>% bind_rows(allpredsa) %>%
+                                 gather("pred", "value", -team,-fixt) %>%
+                                separate(pred, c("pre", "score"), "_")
+
+
+allpreds$score <- as.numeric(as.character(allpreds$score))
+
+
+scorepred <- match19_pred %>% 
+                            gather("pred", "value", -team, -delta, -fixt, -loc) %>%
+                                separate(pred, c("pre", "score"), "_") %>%
+                                  select(team, fixt, loc, value, score) 
+
+
+
+
+
+
+
+scorepred$score <- as.numeric(as.character(scorepred$score))
+
+home_pred <- scorepred %>% filter(loc == "home")
+
+
+away_pred <- scorepred %>% filter(loc == "away")
+
+goalsfor <- home_pred %>% bind_rows(away_pred)
+
+
+scorepred3 <- home_pred %>% left_join(away_pred, by = "fixt") %>%
+                          select(team.x, fixt, loc.x, value.x, score.x, value.y, score.y)
+
+
+colnames(scorepred3)[1] <- "team"
+colnames(scorepred3)[3] <- "loc"
+colnames(scorepred3)[4] <- "vf"
+colnames(scorepred3)[5] <- "sf"
+colnames(scorepred3)[6] <- "va"
+colnames(scorepred3)[7] <- "sa"
+
+
+scorepred4 <- away_pred %>% left_join(home_pred, by = "fixt") %>%
+                         select(team.x, fixt, loc.x, value.x, score.x, value.y, score.y)
+
+
+
+colnames(scorepred4)[1] <- "team"
+colnames(scorepred4)[3] <- "loc"
+colnames(scorepred4)[4] <- "vf"
+colnames(scorepred4)[5] <- "sf"
+colnames(scorepred4)[6] <- "va"
+colnames(scorepred4)[7] <- "sa"
+
+goalagpred <- scorepred3 %>% bind_rows(scorepred4) %>%
+                              select(team, fixt, sa, va)
+
+
+```
+
+
+```{r}
+
+
+
+
+scorepred2 <- goalsfor %>% 
+                                  mutate(val100 = round(value *10000,0))
+
+
+x2 <- uncount(scorepred2, val100)
+
+
+
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+
+
+
+
+scorepred2 <- allpreds %>% 
+                                  mutate(val100 = round(value *10000,0))
+
+
+x2 <- uncount(scorepred2, val100)
+
+
+
+
+
+x2_v2 <- x2 %>% filter(fixt <11)
+
+
+
+
+
+````
+
+
+
+```{r}
+
+
+
+play19 <- get_player_info(season = "19")
+
+
+
+teams19 <- teams %>% filter(Season == 2019)
+
+colnames(teams19)[2] <- "team"
+
+play19_team <- play19 %>% left_join(teams19, by = "team") %>%
+                          select(playername, Team)
+
+
+```
+
+
+```{r}
+
+colnames(x2_v2)[1] <- "Team"
+
+
+colnames(play2)
+
+
+playgoals <- play19_team %>% left_join(x2_v2, by = "Team") 
+
+
+colnames(playgoals)[6] <- "prob"
+
+
+playtest <- playgoals %>% group_by(playername, fixt) %>%
+                              summarise(n = n())
+
+````
+```{r}
+
+
+defencep_g <- playgoals %>% group_by(playername, fixt) %>%
+                                  filter(!is.na(prob))
+
+
+defencep <- sample_n(defencep_g, 1000) ####### defence points 
+
+
+
+
+```
+
+
+
+
+```{r}
+
+
+
+playdat <- twenty16 %>% bind_rows(twenty17) %>%
+                            bind_rows(twenty18) %>%
+                                group_by(player_name) %>%
+                                summarise(ninet = sum(time)/90, xgs = sum(xG), xas = sum(xA), npxGs = sum(npxG)) %>%
+                                    mutate(xg90 = xgs/ninet, xA90= xas/ninet, npxg90 = npxGs / ninet) 
+
+
+
+colnames(playdat)[1] <- "playername"
+
+
+
+
+````
+
+
+
+```{r}
+
+
+
+goals16h <- season16 %>% filter(minutes > 30) %>%
+                          select(was_home, team_h_score, goals_scored, playername) %>% 
+                            filter(was_home == "True") 
+
+colnames(goals16h)[2] <- "score"
+
+goals16a <- season16 %>% filter(minutes > 30) %>%
+           select(was_home, team_a_score, goals_scored, playername) %>% 
+                            filter(was_home == "False") 
+
+
+colnames(goals16a)[2] <- "score"
+
+goals16 <- goals16h %>% bind_rows(goals16a)
+
+
+
+goals17h <- season17 %>% filter(minutes > 30) %>%
+            select(was_home, team_h_score, goals_scored, playername) %>% 
+                            filter(was_home == "True") 
+
+
+
+colnames(goals17h)[2] <- "score"
+
+
+goals17a <- season17 %>% filter(minutes > 30) %>%
+       select(was_home, team_a_score, goals_scored, playername) %>% 
+                            filter(was_home == "False") 
+
+
+colnames(goals17a)[2] <- "score"
+
+goals17 <- goals17h %>% bind_rows(goals17a)
+
+
+
+
+goals18h <- season18 %>% filter(minutes > 30) %>%
+                   select(was_home, team_h_score, goals_scored, playername) %>% 
+                            filter(was_home == "True") 
+
+
+colnames(goals18h)[2] <- "score"
+
+goals18a <- season18 %>% filter(minutes > 30) %>%
+                select(was_home, team_a_score, goals_scored, playername) %>% 
+                            filter(was_home == "False") 
+
+
+colnames(goals18a)[2] <- "score"
+
+goals18 <- goals18h %>% bind_rows(goals18a)
+
+
+
+goals <- goals16 %>% bind_rows(goals17) %>%
+                            bind_rows(goals18) %>%
+                                left_join(playdat, by = "playername") %>%
+                              select(score, goals_scored, xg90) %>%
+                                filter(!is.na(xg90))
+
+
+
+
+
+goals$goals_scored <- as.factor(as.numeric(goals$goals_scored))
+
+
+
+
+```
+
+
+
+
+
+
+```{r}
+
+
+goals_split <- initial_split(goals, prop = 0.8, strata = goals_scored)
+
+
+
+goals_train <- training(goals_split)
+
+
+goals_test <- testing(goals_split)
+
+
+
+
+goal_for <- rand_forest() %>%
+                set_mode("classification") %>%
+                set_engine("ranger") %>%
+                  fit(goals_scored ~ ., goals_train)
+
+
+
+
+
+
+```
+
+
+
+
+```{r}
+
+
+
+goals_predict <- season19 %>% group_by(playername) %>%
+                            summarise(min(fixture)) %>%
+                            select(playername) %>%
+                             slice(rep(1:n(), each = 6)) %>%
+                              group_by(playername) %>%
+                              mutate(score = 0:5) %>%
+                                left_join(playdat, by = "playername") %>%
+                                  select(playername, xg90, score) %>%
+                                    filter(!is.na(xg90))
+
+
+
+x <- predict(goal_for, new_data = goals_predict, type = "prob")
+
+
+goals_predict2 <- goals_predict %>% bind_cols(x) %>%
+                                      gather("pred", "value", -playername, -xg90, -score) %>%
+                                separate(pred, c("pre", "gs"), "_")
+
+
+
+
+
+goalpred2 <- goals_predict2 %>% 
+                                  mutate(val100 = round(value *10000, 0))
+
+
+goalcount <- uncount(goalpred2, val100)
+
+goalcount$gs <- as.numeric(as.character(goalcount$gs))
+
+
+goalcount2 <- goalcount %>% group_by(playername, score, gs) %>%
+                                  summarise(n =n())
+
+
+goalcount3 <- goalcount %>% mutate(delta = score - gs) %>%
+                              filter(delta > -1) %>%
+                          group_by(playername, score) %>%
+                              summarise(totres = n())
+
+
+goalcount4 <- goalcount2 %>% left_join(goalcount3, by = c("playername", "score")) %>%
+                                  mutate(per = n/totres)
+
+```
+
+
+```{r}
+
+play_goal2 <- play_goal %>% left_join(goalcount4, by = c("playername", "score")) %>%
+                                mutate(delta = score - gs) %>%
+                                  filter(delta > -1) %>%
+                                    ungroup() %>%
+                                        group_by(playername, fixt, score, gs) %>%
+                                          summarise(n = n(), meanp = mean(per)) %>%
+                                            mutate(goalper = n * meanp)
+                                                
+
+
+```
+
+
+
+```{r}
+
+matches <- playgoals %>% group_by(playername, fixt) %>%
+                                    summarise(n = n())
+
+test <- uncount(play_goal2, goalper)
+
+
+test2 <- test %>% group_by(playername, fixt) 
+
+
+test3 <- sample_n(test2, 1000)
+
+```
+
+
+```{r}
+
+
+test3_sum <- test3 %>% group_by(playername, fixt, gs) %>%
+                          summarise(n = n())
+
+
+
+
+```
+
+
+```{r}
+
+colnames(playgoals)[6] <- "prob"
+
+x2$score <- as.numeric(as.character(x2$score))
+
+colnames(playgoals2)[2] <- 
+
+
+playgoals2 <- playgoals %>% left_join(goalcount, by  = c("playername", "score"))
+
+
+
+```
+
+
+
+```{r}
+
+play_goal2 <- play_goal %>% left_join(goalcount4, by = c("playername", "score")) %>%
+                                mutate(delta = score - gs) %>%
+                                  filter(delta > -1) %>%
+                                    ungroup() %>%
+                                        group_by(playername, fixt, score, gs) %>%
+                                          summarise(n = n(), meanp = mean(per)) %>%
+                                            mutate(goalper = n * meanp)
+                                                
+
+
+```
+```{r}
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+play_goal3 <- play_goal %>% left_join(goalcount, by = c("playername", "score"))
+
+
+```
+
+
+```{r}
+
+colnames(play19_team)[2] <- "team"
+
+
+play_goal <- x2 %>% filter(fixt < 21) %>%
+                        left_join(play19_team, by = "team")
+
+
+
+
+
+playtest <- play_goal %>% group_by(playername, score, fixt) %>%
+                                summarise(n = n())
+
+
+```
+
+
+```{r}
+
+
+playgoals_t <- playgoals2 %>% group_by(fixt, playername) %>%
+                                summarise(n = n())
+
+
+```
